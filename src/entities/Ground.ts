@@ -1,5 +1,6 @@
 import Entity from "~/internal/Entity";
 import * as THREE from 'three';
+import { DefaultSystem } from "~/entities/DefaultSystem";
 
 export class Ground extends Entity {
   geometry: THREE.PlaneGeometry;
@@ -7,12 +8,14 @@ export class Ground extends Entity {
   plane: THREE.Mesh<THREE.PlaneGeometry, THREE.MeshStandardMaterial>;
 
   start() {
+    const defaultSystem = this.app.getDefaultSystem();
+
     this.geometry = new THREE.PlaneGeometry(5, 5);
     this.material = new THREE.MeshStandardMaterial( { color: 0x00ffff, side: THREE.DoubleSide });
     this.plane = new THREE.Mesh(this.geometry, this.material);
     this.plane.receiveShadow = true;
     this.plane.position.set(0, 0, -1);
 
-    this.app.scene.add(this.plane);
+    defaultSystem.scene.add(this.plane);
   }
 }
