@@ -4,10 +4,13 @@ import { Ground } from "~/entities/Ground";
 import { Player } from "~/entities/Player";
 
 export class InputSystem extends Entity {
+  keyMap = new Map<string, boolean>();
   mousePosition = new THREE.Vector2();
   raycaster = new THREE.Raycaster();
 
   start() {
+    window.addEventListener('keydown', this.onKeyDown);
+    window.addEventListener('keyup', this.onKeyUp);
     window.addEventListener('pointerup', this.onMouseUp);
     window.addEventListener('pointerdown', this.onMouseDown);
     window.addEventListener('pointermove', this.onMouseMove);
@@ -22,6 +25,18 @@ export class InputSystem extends Entity {
     const defaultSystem = this.app.getDefaultSystem();
     this.raycaster.setFromCamera(position, defaultSystem.camera);
     return this.raycaster.intersectObjects(defaultSystem.scene.children);
+  }
+
+  isPressed(key: string) {
+    return this.keyMap.get(key) ?? false;
+  }
+
+  onKeyDown = (e: KeyboardEvent) => {
+     this.keyMap.set(e.key, true);
+  }
+
+  onKeyUp = (e: KeyboardEvent) => {
+    this.keyMap.set(e.key, false);
   }
 
   onMouseDown = (e: MouseEvent) => {
@@ -52,7 +67,5 @@ export class InputSystem extends Entity {
 
   onMouseMove = (e: MouseEvent) => {
     this.updateMousePosition(e);
-
-
   }
 }
