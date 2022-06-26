@@ -32,4 +32,8 @@ export class Bullet extends Entity {
     this.cylinder.position.setY(this.cylinder.position.y + pos.y);
     this.cylinder.rotation.set(0, 0, this.angle - Math.PI * 0.5);
   }
+
+  destroy() {
+    this.app.removeEntity(this);
+  }
 }

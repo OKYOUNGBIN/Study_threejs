@@ -22,6 +22,15 @@ export default class Application {
     }
   }
 
+  removeEntity(entity: Entity) {
+    const entityIndex = this.entities
+      .findIndex((it) => it === entity);
+
+    if (entityIndex !== -1) {
+      this.entities.splice(entityIndex, 1);
+    }
+  }
+
   getDefaultSystem() {
     return this.getEntities().find(it => it instanceof DefaultSystem)! as DefaultSystem;
   }

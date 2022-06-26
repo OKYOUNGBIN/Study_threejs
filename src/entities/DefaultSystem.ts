@@ -27,7 +27,7 @@ export class DefaultSystem extends Entity {
     const delta = this.clock.getDelta();
     const entities = this.app.getEntities();
 
-    for (let i = 0, length = entities.length; i < length; i++) {
+    for (let i = 0; i < entities.length; i++) {
       entities[i].update(delta);
     }
 
