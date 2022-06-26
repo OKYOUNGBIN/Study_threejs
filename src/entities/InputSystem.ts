@@ -2,6 +2,7 @@ import Entity from "~/internal/Entity";
 import * as THREE from 'three';
 import { Ground } from "~/entities/Ground";
 import { Player } from "~/entities/Player";
+import { angleBetween } from "~/shared/angleBetween";
 
 export class InputSystem extends Entity {
   keyMap = new Map<string, boolean>();
@@ -29,6 +30,33 @@ export class InputSystem extends Entity {
 
   isPressed(key: string) {
     return this.keyMap.get(key) ?? false;
+  }
+
+  update(delta: number) {
+    if (this.isPressed(' ')) {
+      const player = this.app.getEntities().find(it => it instanceof Player) as Player;
+      if (!player) {
+        return;
+      }
+
+      const intersects = this.getIntersects(this.mousePosition);
+      const ground = this.app.getEntities().find(it => it instanceof Ground) as Ground;
+      if (!ground) {
+        return;
+      }
+
+      const intersect = intersects.find(it => it.object === ground.plane);
+      if (!intersect) {
+        return;
+      }
+
+      const angle = angleBetween(
+        new THREE.Vector2(player.box.position.x, player.box.position.y),
+        new THREE.Vector2(intersect.point.x, intersect.point.y),
+      );
+
+      player.spawnBullet(angle);
+    }
   }
 
   onKeyDown = (e: KeyboardEvent) => {

@@ -1,11 +1,7 @@
 import Entity from "~/internal/Entity";
 import * as THREE from 'three';
-
-function angleBetween(a: THREE.Vector2, b: THREE.Vector2) {
-  const dx = b.x - a.x;
-  const dy = b.y - a.y;
-  return Math.atan2(dy, dx);
-}
+import { Bullet } from "~/entities/Bullet";
+import { angleBetween } from "~/shared/angleBetween";
 
 export class Player extends Entity {
   targetPosition?: THREE.Vector3;
@@ -49,6 +45,12 @@ export class Player extends Entity {
   setTargetPosition(position: THREE.Vector3) {
     this.targetPosition = position;
     this.targetPosition.setZ(this.box.position.z);
+  }
 
+  spawnBullet(angle: number) {
+    const bullet = new Bullet();
+    bullet.angle = angle;
+    bullet.startPosition = this.box.position;
+    this.app.addEntity(bullet);
   }
 }

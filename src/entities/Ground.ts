@@ -11,6 +11,7 @@ export class Ground extends Entity {
 
     this.geometry = new THREE.PlaneGeometry(20, 10, 10, 10);
     this.material = new THREE.MeshStandardMaterial( { color: 0x00ffff, side: THREE.DoubleSide });
+
     this.plane = new THREE.Mesh(this.geometry, this.material);
     this.plane.receiveShadow = true;
     this.plane.position.set(0, 0, -1);

@@ -9,5 +9,5 @@ window.addEventListener('load', () => {
   app.addEntity(new Ground());
   app.addEntity(new Player());
   app.addEntity(new InputSystem());
-  app.addEntity(new Bullet());
+
 });
