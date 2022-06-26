@@ -9,7 +9,7 @@ export class Ground extends Entity {
   start() {
     const defaultSystem = this.app.getDefaultSystem();
 
-    this.geometry = new THREE.PlaneGeometry(20, 10, 10, 10);
+    this.geometry = new THREE.PlaneGeometry(100, 100, 10, 10);
     this.material = new THREE.MeshStandardMaterial( { color: 0x00ffff, side: THREE.DoubleSide });
 
     this.plane = new THREE.Mesh(this.geometry, this.material);

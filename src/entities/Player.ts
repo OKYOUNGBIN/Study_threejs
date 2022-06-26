@@ -10,6 +10,8 @@ export class Player extends Entity {
   box: THREE.Mesh<THREE.PlaneGeometry, THREE.MeshStandardMaterial>;
 
   speed = 5.0;
+  delay = 100;
+  lastSpawnAt = Date.now();
 
   start() {
     const defaultSystem = this.app.getDefaultSystem();
@@ -48,9 +50,13 @@ export class Player extends Entity {
   }
 
   spawnBullet(angle: number) {
-    const bullet = new Bullet();
-    bullet.angle = angle;
-    bullet.startPosition = this.box.position;
-    this.app.addEntity(bullet);
+    const currentTime = Date.now();
+    if (currentTime - this.lastSpawnAt >= this.delay) {
+      this.lastSpawnAt = Date.now();
+      const bullet = new Bullet();
+      bullet.angle = angle;
+      bullet.startPosition = this.box.position;
+      this.app.addEntity(bullet);
+    }
   }
 }
