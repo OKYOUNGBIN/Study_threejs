@@ -1,5 +1,5 @@
 import Entity from "~/internal/Entity";
-import * as THREE from 'three';
+import * as THREE from "three";
 import { Ground } from "~/entities/Ground";
 import { Player } from "~/entities/Player";
 import { angleBetween } from "~/shared/angleBetween";
@@ -10,11 +10,11 @@ export class InputSystem extends Entity {
   raycaster = new THREE.Raycaster();
 
   start() {
-    window.addEventListener('keydown', this.onKeyDown);
-    window.addEventListener('keyup', this.onKeyUp);
-    window.addEventListener('pointerup', this.onMouseUp);
-    window.addEventListener('pointerdown', this.onMouseDown);
-    window.addEventListener('pointermove', this.onMouseMove);
+    window.addEventListener("keydown", this.onKeyDown);
+    window.addEventListener("keyup", this.onKeyUp);
+    window.addEventListener("pointerup", this.onMouseUp);
+    window.addEventListener("pointerdown", this.onMouseDown);
+    window.addEventListener("pointermove", this.onMouseMove);
   }
 
   updateMousePosition(e: MouseEvent) {
@@ -33,26 +33,30 @@ export class InputSystem extends Entity {
   }
 
   update(delta: number) {
-    if (this.isPressed(' ')) {
-      const player = this.app.getEntities().find(it => it instanceof Player) as Player;
+    if (this.isPressed(" ")) {
+      const player = this.app
+        .getEntities()
+        .find((it) => it instanceof Player) as Player;
       if (!player) {
         return;
       }
 
       const intersects = this.getIntersects(this.mousePosition);
-      const ground = this.app.getEntities().find(it => it instanceof Ground) as Ground;
+      const ground = this.app
+        .getEntities()
+        .find((it) => it instanceof Ground) as Ground;
       if (!ground) {
         return;
       }
 
-      const intersect = intersects.find(it => it.object === ground.plane);
+      const intersect = intersects.find((it) => it.object === ground.plane);
       if (!intersect) {
         return;
       }
 
       const angle = angleBetween(
         new THREE.Vector2(player.box.position.x, player.box.position.y),
-        new THREE.Vector2(intersect.point.x, intersect.point.y),
+        new THREE.Vector2(intersect.point.x, intersect.point.y)
       );
 
       player.spawnBullet(angle);
@@ -60,40 +64,44 @@ export class InputSystem extends Entity {
   }
 
   onKeyDown = (e: KeyboardEvent) => {
-     this.keyMap.set(e.key, true);
-  }
+    this.keyMap.set(e.key, true);
+  };
 
   onKeyUp = (e: KeyboardEvent) => {
     this.keyMap.set(e.key, false);
-  }
+  };
 
   onMouseDown = (e: MouseEvent) => {
     this.updateMousePosition(e);
 
     const intersects = this.getIntersects(this.mousePosition);
-    const ground = this.app.getEntities().find(it => it instanceof Ground) as Ground;
+    const ground = this.app
+      .getEntities()
+      .find((it) => it instanceof Ground) as Ground;
     if (!ground) {
       return;
     }
 
-    const intersect = intersects.find(it => it.object === ground.plane);
+    const intersect = intersects.find((it) => it.object === ground.plane);
     if (!intersect) {
       return;
     }
 
-    const player = this.app.getEntities().find(it => it instanceof Player) as Player;
+    const player = this.app
+      .getEntities()
+      .find((it) => it instanceof Player) as Player;
     if (!player) {
       return;
     }
 
     player.setTargetPosition(intersect.point);
-  }
+  };
 
   onMouseUp = (e: MouseEvent) => {
     this.updateMousePosition(e);
-  }
+  };
 
   onMouseMove = (e: MouseEvent) => {
     this.updateMousePosition(e);
-  }
+  };
 }
