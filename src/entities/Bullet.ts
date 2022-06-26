@@ -7,8 +7,9 @@ export class Bullet extends Entity {
   cylinder: THREE.Mesh<THREE.CylinderGeometry, THREE.MeshStandardMaterial>;
 
   angle = 0;
-  speed = 10;
+  speed = Math.random() * 5 + 5;
   startPosition: THREE.Vector3 = new THREE.Vector3(0, 0, 0);
+  hasChild = false;
 
   start() {
     const defaultSystem = this.app.getDefaultSystem();
@@ -31,9 +32,24 @@ export class Bullet extends Entity {
     this.cylinder.position.setX(this.cylinder.position.x + pos.x);
     this.cylinder.position.setY(this.cylinder.position.y + pos.y);
     this.cylinder.rotation.set(0, 0, this.angle - Math.PI * 0.5);
+
+    if (!this.hasChild && this.startPosition.distanceTo(this.cylinder.position) > 5) {
+      this.hasChild = true;
+
+      const iteration = 100;
+      const oneAngle = Math.PI * 2.0 / iteration;
+      for (let i = 0; i < iteration; i++) {
+        const bullet = new Bullet();
+        bullet.angle = oneAngle * i;
+        bullet.startPosition = this.cylinder.position;
+        bullet.hasChild = true;
+        this.app.addEntity(bullet);
+      }
+    }
   }
 
   destroy() {
+    this.app.getDefaultSystem().scene.remove(this.cylinder);
     this.app.removeEntity(this);
   }
 }
